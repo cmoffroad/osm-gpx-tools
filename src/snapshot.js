@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 // VLC snaphost filename regexp based on prefix "$F-$T-" with sequential numbering enabled
 const SNAP_REGEXP = /file___((_[a-zA-Z0-9]+)*).([a-zA-Z0-9]+)-(\d{2})_(\d{2})_(\d{2})-\d+\.jpg/;
@@ -22,6 +23,9 @@ files.forEach(file => {
   if (!matches)
     return;
 
+  // compute absolute file path with folder
+  const filePath = path.join(folder, file);
+
   // compute orginal video path
   const videoPath = matches[1].replace(/_/g, '/') + '.' + matches[3];
   // compute snap video time in seconds
@@ -38,7 +42,7 @@ files.forEach(file => {
   const newTime = (mtimeMs / 1000.0) + snapTime;
 
   // write new time to snapshot file
-  fs.utimesSync(file, +new Date(), newTime);
+  fs.utimesSync(filePath, +new Date(), newTime);
 
   console.log(videoPath, snapTime);
 })
