@@ -19,6 +19,8 @@
   "dependencies": {
     "gpxparser": "^3.0.8",
     "moment": "^2.29.4",
-    "piexifjs": "^1.0.6"
+    "piexifjs": "^1.0.6",
+    "xmldom": "^0.6.0",
+    "xpath": "0.0.32"
   }
 }
