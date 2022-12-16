@@ -1,0 +1,1 @@
+mapillary_tools process $0 && mapillary_tools upload $0 --user_name "cmoffroad"
