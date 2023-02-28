@@ -1,1 +1,1 @@
-mapillary_tools process . && mapillary_tools upload . --user_name "cmoffroad"
+mapillary_tools process . --skip_process_errors && mapillary_tools upload . --user_name "cmoffroad"

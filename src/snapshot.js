@@ -20,8 +20,11 @@ const files = fs.readdirSync(folder);
 files.forEach(file => {
   // test for snapshot regexp
   const matches = file.match(SNAP_REGEXP);
-  if (!matches)
+  if (!matches) {
+    console.log(`${file} does not match ${SNAP_REGEXP}`);
+
     return;
+  }
 
   // compute absolute file path with folder
   const filePath = path.join(folder, file);
