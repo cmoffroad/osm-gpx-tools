@@ -32,7 +32,7 @@ gpx.parse(gpxContent);
 
 // load all img files
 const imgFiles = fs.readdirSync(folder)
-  .filter(file => file.match(/\.jpg$/));
+  .filter(file => file.match(/\.jpg$/i));
 
 // iterate through each image file
 imgFiles.forEach(imgFile => {
