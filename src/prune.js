@@ -11,9 +11,5 @@ if (!fs.existsSync(folder)) {
   process.exit(1);
 }
 
-let deleteCount = 0;
-
 lib.pruneFolderImages(folder);
 
-console.log(``);
-console.log(`> deleted ${deleteCount}, and kept ${imgFiles.length - deleteCount} original images`)

@@ -20,17 +20,20 @@ function getBearingDeg(lat1, lon1, lat2, lon2) {
 }
 
 function pruneFolderImages(folderPath) {
-  const imgFiles = fs.readdirSync(folderPath)
+
+  let deleteCount = 0;
+
+  const files = fs.readdirSync(folderPath)
+    .map(file => path.join(folderPath, file));
+
+  const imgFiles = files
     .filter(file => file.match(/\.jpg$/i));
 
   // iterate through each image file
   imgFiles.forEach(imgFile => {
 
-    // compute absolute image path
-    const imgPath = path.join(folderPath, imgFile);
-
     // load exif GPS data
-    const imgBinary = fs.readFileSync(imgPath).toString('binary');
+    const imgBinary = fs.readFileSync(imgFile).toString('binary');
     const imgExif = piexif.load(imgBinary);
 
     // lookup exif attributes
@@ -53,18 +56,20 @@ function pruneFolderImages(folderPath) {
     // exit if mandatory attributes are missing
     if (timestamp === undefined || latitude === undefined || longitude === undefined) {
       ++deleteCount;
-      console.log(`- deleting ${imgPath}`);
-      fs.unlinkSync(imgPath);
+      console.log(`- deleting ${imgFile}`);
+      // fs.unlinkSync(imgFile);
     }
   })
 
-  const subFolders = fs.readdirSync(folderPath)
-    .filter(file => fs.isDirectory(file));
+  const subFolders = files
+    .filter(file => fs.lstatSync(file).isDirectory());
 
-  subFolder.forEach(subFolder => {
-    const subFolderPath = path.join(folderPath, subFolder);
-    pruneFolderImages(subFolderPath);
-  })
+  subFolders.forEach(subFolder => {
+    pruneFolderImages(subFolder);
+  });
+
+  console.log(``);
+  console.log(`> deleted ${deleteCount}, and kept ${imgFiles.length - deleteCount} original images`);
 }
 
 module.exports = {
