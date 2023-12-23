@@ -1,0 +1,1 @@
+for f in *.MP4; do; D=${f%%.*}; mkdir $D; cd $D; rm *.jpg; ffmpeg -i ../$f -r 1 -q:v 2  %04d.jpg; cd ..; done

@@ -40,8 +40,6 @@ imgFiles.forEach(imgFile => {
   // compute absolute image path
   const imgPath = path.join(folder, imgFile);
 
-  console.log(`> ${imgPath}`);
-
   // load exif GPS data
   const imgBinary = fs.readFileSync(imgPath).toString('binary');
   const imgExif = piexif.load(imgBinary);
@@ -57,19 +55,22 @@ imgFiles.forEach(imgFile => {
   const imgExifDatestamp    = imgExif.GPS[piexif.GPSIFD.GPSDateStamp];
 
   // compute direction, latitude, longitude, and timestamp based on exit attributes
-  const direction = imgExifDirection && imgExifDirectionRef ? piexif.GPSHelper.dmsRationalToDeg(imgExifDirection, imgExifDirectionRef) : undefined;
+  const direction = undefined; //imgExifDirection && imgExifDirectionRef ? piexif.GPSHelper.dmsRationalToDeg(imgExifDirection, imgExifDirectionRef) : undefined;
   const latitude  = imgExifLatitude  && imgExifLatitudeRef  ? piexif.GPSHelper.dmsRationalToDeg(imgExifLatitude, imgExifLatitudeRef) : undefined;
   const longitude = imgExifLongitude && imgExifLongitudeRef ? piexif.GPSHelper.dmsRationalToDeg(imgExifLongitude, imgExifLongitudeRef) : undefined;
   const hours = imgExifTimestamp ? piexif.GPSHelper.dmsRationalToDeg(imgExifTimestamp) : undefined;
   const timestamp = imgExifDatestamp ? moment.utc(imgExifDatestamp, 'YYYY:MM:DD').add(hours, 'hours') : undefined;
 
+  // exit if mandatory attributes are missing
+  if (timestamp === undefined || latitude === undefined || longitude === undefined)
+    return;
+
+  console.log(`> ${imgPath}`);
+
   console.log(`  ~ timestamp: ${timestamp}`);
   console.log(`  ~ latlon:    ${latitude}, ${longitude}`);
   console.log(`  ~ direction: ${direction}`);
 
-  // exit if mandatory attributes are missing
-  if (timestamp === undefined || latitude === undefined || longitude === undefined)
-    return;
 
   let previousPoint;
   // iterate through folder gpx tracks
