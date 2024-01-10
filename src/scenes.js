@@ -8,15 +8,8 @@ const GOPRO_REGEXP = /\.MP4$/;
 const args = process.argv.slice(2);
 const videosFolder = args[0] || path.resolve('.');
 
-const scenesFolder = path.join(videosFolder, 'scenes');
-
 if (!fs.existsSync(videosFolder)) {
   console.error(`videos folder ${videosFolder} does not exist!`);
-  process.exit(1);
-}
-
-if (!fs.existsSync(scenesFolder)) {
-  console.error(`scenes folder ${scenesFolder} does not exist!`);
   process.exit(1);
 }
 
@@ -27,18 +20,18 @@ videos.forEach(video => {
 
   // compute absolute file path with folder
   const videoPath = path.join(videosFolder, video);
+  const scenesFolder = path.join(videosFolder, video.replace(/\.[^/.]+$/, ""));
 
   // extract original video creation date in ms
   const { mtimeMs } = fs.statSync(videoPath);
   const videoTime = mtimeMs / 1000.0;
   const videoDate = new Date(mtimeMs);
 
-  const scenes = fs.readdirSync(scenesFolder).filter(file => file.indexOf(video) === 0);
+  const scenes = fs.readdirSync(scenesFolder);
 
   console.log(`-- processing ${videoPath} [${videoDate.toUTCString()}] (${scenes.length} scenes)`);
 
   scenes.forEach(scene => {
-
     const scenePath = path.join(scenesFolder, scene);
     const sceneIndex = scene.match(/_(\d+).jpg$/)[1];
     const sceneTime = parseInt(sceneIndex) - 1;

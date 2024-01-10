@@ -56,12 +56,13 @@ function pruneFolderImages(folderPath) {
     // exit if mandatory attributes are missing
     if (timestamp === undefined || latitude === undefined || longitude === undefined) {
       ++deleteCount;
-      console.log(`- deleting ${imgFile}`);
-      // fs.unlinkSync(imgFile);
+      // console.log(`- deleting ${imgFile}`);
+      fs.unlinkSync(imgFile);
     }
   })
 
-  const subFolders = files
+  const subFolders = fs.readdirSync(folderPath)
+    .map(file => path.join(folderPath, file))
     .filter(file => fs.lstatSync(file).isDirectory());
 
   subFolders.forEach(subFolder => {
