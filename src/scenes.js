@@ -33,15 +33,18 @@ videos.forEach(video => {
 
   scenes.forEach(scene => {
     const scenePath = path.join(scenesFolder, scene);
-    const sceneIndex = scene.match(/_(\d+).jpg$/)[1];
-    const sceneTime = parseInt(sceneIndex) - 1;
-    const newTime = videoTime + sceneTime;
-    const newDate = new Date(newTime * 1000);
+    const sceneMatch = scene.match(/_(\d+).jpg$/);
+    if (sceneMatch) {
+      const sceneIndex = sceneMatch[1];
+      const sceneTime = parseInt(sceneIndex) - 1;
+      const newTime = videoTime + sceneTime;
+      const newDate = new Date(newTime * 1000);
 
-    // write new time to snapshot file
-    fs.utimesSync(scenePath, +new Date(), newTime);
+      // write new time to snapshot file
+      fs.utimesSync(scenePath, +new Date(), newTime);
 
-    console.log(`    ${scene} [${newDate.toUTCString()}] +${sceneTime}`)
+      console.log(`    ${scene} [${newDate.toUTCString()}] +${sceneTime}`)
+    }
   });
 
 })

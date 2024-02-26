@@ -17,9 +17,12 @@
   },
   "homepage": "https://github.com/cmoffroad/osm-gpx-tools#readme",
   "dependencies": {
+    "@mapbox/geosimplify-js": "^0.1.0",
     "gpxparser": "^3.0.8",
+    "haversine": "^1.1.1",
     "moment": "^2.29.4",
     "piexifjs": "^1.0.6",
+    "simplify-js": "^1.2.4",
     "xmldom": "^0.6.0",
     "xpath": "0.0.32"
   }
