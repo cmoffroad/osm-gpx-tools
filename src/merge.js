@@ -23,7 +23,7 @@ const content = [
 ];
 
 files.forEach(file => {
-  // console.log(`---- input ${file}`);
+  console.log(`---- input ${file}`);
   const segments = parseGPXTrackSegments(file);
   segments.forEach(points => {
     const simplifiedPoints = simplify(points, 10, 100);
